@@ -29,6 +29,18 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	}
 
 	public Integer saveMoney(Integer amountToAdd, Integer accountNumber) {
-		return 0;
+		Integer currentAmount = getAccountWithNumber(accountNumber).getAmount();
+		
+		getAccountWithNumber(accountNumber).setAmount(currentAmount + amountToAdd);
+		
+		return currentAmount + amountToAdd;
+	}
+
+	private Account getAccountWithNumber(Integer accountNumber) {
+		return this.getAccountList()
+				.stream()
+				.filter(a -> a.getAccountNumber() == accountNumber)
+				.findFirst()
+				.get();
 	}
 }
