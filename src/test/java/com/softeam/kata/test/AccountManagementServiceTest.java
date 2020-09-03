@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import com.softeam.kata.entities.Account;
 import com.softeam.kata.entities.Operation;
+import com.softeam.kata.entities.OperationType;
 import com.softeam.kata.exceptions.OverdraftWithdrawalException;
 import com.softeam.kata.service.impl.AccountManagementServiceImpl;
 
@@ -29,7 +30,9 @@ public class AccountManagementServiceTest {
 		accountList.add(account2);
 		accountList.add(account3);
 		accountList.add(account4);
-		accountManagement = new AccountManagementServiceImpl(accountList);
+		
+		List<Operation> operationList = new ArrayList<Operation>();
+		accountManagement = new AccountManagementServiceImpl(accountList, operationList);
 	}
 
 	@Test
@@ -86,6 +89,10 @@ public class AccountManagementServiceTest {
 		
 		assertFalse(operations.isEmpty());
 		assertTrue(operations.size() == 2);
+		assertEquals(OperationType.DEPOSIT, operations.get(0).getType());
+		assertEquals(new Integer(250), operations.get(0).getBalance());
+		assertEquals(OperationType.WITHDRAWAL, operations.get(1).getType());
+		assertEquals(new Integer(150), operations.get(1).getBalance());
 	}
 	
 }

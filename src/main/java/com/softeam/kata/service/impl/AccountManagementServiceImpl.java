@@ -1,10 +1,13 @@
 package com.softeam.kata.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.softeam.kata.entities.Account;
 import com.softeam.kata.entities.Operation;
+import com.softeam.kata.entities.OperationType;
 import com.softeam.kata.exceptions.OverdraftWithdrawalException;
 import com.softeam.kata.service.AccountManagementService;
 
@@ -16,10 +19,14 @@ import com.softeam.kata.service.AccountManagementService;
 public class AccountManagementServiceImpl implements AccountManagementService {
 
 	// This list is used to store accounts
-	private List<Account> accountList = new ArrayList<Account>();
+	private List<Account> accountList;
+	
+	// This list is used to store operations
+	private List<Operation> operationList;
 
-	public AccountManagementServiceImpl(List<Account> accountList) {
+	public AccountManagementServiceImpl(List<Account> accountList, List<Operation> operationList) {
 		this.accountList = accountList;
+		this.operationList = operationList;
 	}
 
 	public List<Account> getAccountList() {
@@ -35,7 +42,12 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		
 		getAccountWithNumber(accountNumber).setAmount(currentAmount + amountToAdd);
 		
-		return getAccountWithNumber(accountNumber).getAmount();
+		Integer balance = getAccountWithNumber(accountNumber).getAmount();
+		
+		Date date = new Date(System.currentTimeMillis());
+		operationList.add(new Operation(accountNumber, OperationType.DEPOSIT,date, amountToAdd, balance));
+		
+		return balance;
 	}
 
 
@@ -46,11 +58,16 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		if(amountToRetrieve > currentAmount) throw new OverdraftWithdrawalException("Unpermitted overdraft withdrawal");
 		getAccountWithNumber(accountNumber).setAmount(currentAmount - amountToRetrieve);
 		
-		return getAccountWithNumber(accountNumber).getAmount();
+		Integer balance = getAccountWithNumber(accountNumber).getAmount();
+		
+		Date date = new Date(System.currentTimeMillis());
+		operationList.add(new Operation(accountNumber, OperationType.WITHDRAWAL,date, amountToRetrieve, balance));
+		
+		return balance;
 	}
 	
 	private Account getAccountWithNumber(Integer accountNumber) {
-		return this.getAccountList()
+		return accountList
 				.stream()
 				.filter(a -> a.getAccountNumber() == accountNumber)
 				.findAny()
@@ -59,7 +76,12 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
 	@Override
 	public List<Operation> seeAccountHistory(Integer accountNumber) {
-		// TODO Auto-generated method stub
-		return new ArrayList<Operation>();
+		
+		List<Operation> history = new ArrayList<Operation>();
+		for(Operation operation : operationList) {
+			if (operation.getAccountNumber() == accountNumber)
+				history.add(operation);
+		}
+		return history;
 	}
 }
