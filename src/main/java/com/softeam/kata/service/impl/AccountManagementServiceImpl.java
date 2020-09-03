@@ -40,7 +40,12 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		return this.getAccountList()
 				.stream()
 				.filter(a -> a.getAccountNumber() == accountNumber)
-				.findFirst()
+				.findAny()
 				.get();
+	}
+
+	@Override
+	public Integer retrieveMoney(Integer amountToRetrieve, Integer accountNumber) {
+		return 0;
 	}
 }

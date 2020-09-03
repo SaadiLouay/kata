@@ -43,4 +43,16 @@ public class AccountManagementServiceTest {
 		Integer exectedAfterAmount = beforeAmount + amountToAdd;
 		assertEquals(afterAmount, exectedAfterAmount);
 	}
+	
+	@Test
+	public void testRetrieveMoney() {
+
+		Integer amountToAdd = 250;
+		Integer amountToRetrieve = 100;
+		Integer accountNumber = 123;
+		Integer afterAddAmount = accountManagement.saveMoney(amountToAdd, accountNumber);
+		Integer afterRetrieveAmmount = accountManagement.retrieveMoney(amountToRetrieve, accountNumber);
+		Integer exectedAfterAmount = afterAddAmount - amountToRetrieve;
+		assertEquals(afterRetrieveAmmount, exectedAfterAmount);
+	}
 }
