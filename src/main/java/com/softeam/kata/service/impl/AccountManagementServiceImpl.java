@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.softeam.kata.entities.Account;
+import com.softeam.kata.exceptions.OverdraftWithdrawalException;
 import com.softeam.kata.service.AccountManagementService;
 
 /**
@@ -41,6 +42,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public Integer retrieveMoney(Integer amountToRetrieve, Integer accountNumber) {
 		Integer currentAmount = getAccountWithNumber(accountNumber).getAmount();
 		
+		if(amountToRetrieve > currentAmount) throw new OverdraftWithdrawalException("Unpermitted overdraft withdrawal");
 		getAccountWithNumber(accountNumber).setAmount(currentAmount - amountToRetrieve);
 		
 		return getAccountWithNumber(accountNumber).getAmount();

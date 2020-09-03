@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.softeam.kata.entities.Account;
+import com.softeam.kata.exceptions.OverdraftWithdrawalException;
 import com.softeam.kata.service.impl.AccountManagementServiceImpl;
 
 public class AccountManagementServiceTest {
@@ -48,6 +49,18 @@ public class AccountManagementServiceTest {
 	public void testRetrieveMoney() {
 
 		Integer amountToAdd = 250;
+		Integer amountToRetrieve = 100;
+		Integer accountNumber = 123;
+		Integer afterAddAmount = accountManagement.saveMoney(amountToAdd, accountNumber);
+		Integer afterRetrieveAmmount = accountManagement.retrieveMoney(amountToRetrieve, accountNumber);
+		Integer exectedAfterAmount = afterAddAmount - amountToRetrieve;
+		assertEquals(afterRetrieveAmmount, exectedAfterAmount);
+	}
+	
+	@Test(expected = OverdraftWithdrawalException.class)
+	public void testRetrieveMoneyOverdraft() {
+
+		Integer amountToAdd = 50;
 		Integer amountToRetrieve = 100;
 		Integer accountNumber = 123;
 		Integer afterAddAmount = accountManagement.saveMoney(amountToAdd, accountNumber);
