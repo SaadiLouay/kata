@@ -1,6 +1,8 @@
 package com.softeam.kata.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.softeam.kata.entities.Account;
+import com.softeam.kata.entities.Operation;
 import com.softeam.kata.exceptions.OverdraftWithdrawalException;
 import com.softeam.kata.service.impl.AccountManagementServiceImpl;
 
@@ -68,4 +71,21 @@ public class AccountManagementServiceTest {
 		Integer exectedAfterAmount = afterAddAmount - amountToRetrieve;
 		assertEquals(afterRetrieveAmmount, exectedAfterAmount);
 	}
+	
+	@Test
+	public void testSeeAccountHistory() {
+
+		Integer amountToAdd = 250;
+		Integer amountToRetrieve = 100;
+		Integer accountNumber = 123;
+		Integer afterAddAmount = accountManagement.saveMoney(amountToAdd, accountNumber);
+		Integer afterRetrieveAmmount = accountManagement.retrieveMoney(amountToRetrieve, accountNumber);
+
+		List<Operation> operations = new ArrayList<Operation>();
+		operations = accountManagement.seeAccountHistory(accountNumber);
+		
+		assertFalse(operations.isEmpty());
+		assertTrue(operations.size() == 2);
+	}
+	
 }

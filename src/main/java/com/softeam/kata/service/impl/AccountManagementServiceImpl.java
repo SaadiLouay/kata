@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.softeam.kata.entities.Account;
+import com.softeam.kata.entities.Operation;
 import com.softeam.kata.exceptions.OverdraftWithdrawalException;
 import com.softeam.kata.service.AccountManagementService;
 
@@ -54,5 +55,11 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 				.filter(a -> a.getAccountNumber() == accountNumber)
 				.findAny()
 				.get();
+	}
+
+	@Override
+	public List<Operation> seeAccountHistory(Integer accountNumber) {
+		// TODO Auto-generated method stub
+		return new ArrayList<Operation>();
 	}
 }
