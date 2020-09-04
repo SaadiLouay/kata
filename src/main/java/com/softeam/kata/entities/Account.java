@@ -1,5 +1,7 @@
 package com.softeam.kata.entities;
 
+import java.math.BigDecimal;
+
 /**
 *
 * @author Louay Saadi
@@ -15,10 +17,10 @@ public class Account {
 	private Integer accountNumber;
 	
 	// Amount available in the account
-	private Integer amount;
+	private BigDecimal amount;
 	
 	
-	public Account(Integer accountNumber, Integer amount) {
+	public Account(Integer accountNumber, BigDecimal amount) {
 		this.accountNumber = accountNumber;
 		this.amount = amount;
 	}
@@ -31,11 +33,11 @@ public class Account {
 		this.accountNumber = accountNumber;
 	}
 
-	public Integer getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Integer amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 }

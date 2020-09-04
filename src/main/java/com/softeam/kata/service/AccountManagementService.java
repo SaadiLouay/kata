@@ -1,5 +1,6 @@
 package com.softeam.kata.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.softeam.kata.entities.Operation;
@@ -18,7 +19,7 @@ public interface AccountManagementService {
 	 *
 	 * @return the updated amount of the account
 	 */
-	public Integer saveMoney(Integer amountToAdd, Integer accountNumber);
+	public BigDecimal saveMoney(BigDecimal amountToAdd, Integer accountNumber);
 	
 	
 	/**
@@ -28,7 +29,7 @@ public interface AccountManagementService {
 	 *
 	 * @return the updated amount of the account
 	 */
-	public Integer retrieveMoney(Integer amountToRetrieve, Integer accountNumber);
+	public BigDecimal retrieveMoney(BigDecimal amountToRetrieve, Integer accountNumber);
 	
 	/**
 	 * Takes an "accountNumber" parameter and returns 
@@ -37,5 +38,5 @@ public interface AccountManagementService {
 	 *
 	 * @return the list of operations
 	 */
-	public List<Operation> seeAccountHistory(Integer accountNumber);
+	public String seeAccountHistory(Integer accountNumber);
 }

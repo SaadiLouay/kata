@@ -1,6 +1,6 @@
 package com.softeam.kata.service.impl;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,31 +37,32 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		this.accountList = accountList;
 	}
 
-	public Integer saveMoney(Integer amountToAdd, Integer accountNumber) {
-		Integer currentAmount = getAccountWithNumber(accountNumber).getAmount();
+	@Override
+	public BigDecimal saveMoney(BigDecimal amountToAdd, Integer accountNumber) {
+		BigDecimal currentAmount = getAccountWithNumber(accountNumber).getAmount();
 		
-		getAccountWithNumber(accountNumber).setAmount(currentAmount + amountToAdd);
+		getAccountWithNumber(accountNumber).setAmount(currentAmount.add(amountToAdd));
 		
-		Integer balance = getAccountWithNumber(accountNumber).getAmount();
+		BigDecimal balance = getAccountWithNumber(accountNumber).getAmount();
 		
 		Date date = new Date(System.currentTimeMillis());
-		operationList.add(new Operation(accountNumber, OperationType.DEPOSIT,date, amountToAdd, balance));
+		operationList.add(new Operation(accountNumber, OperationType.DEPOSIT, date, amountToAdd, balance));
 		
 		return balance;
 	}
 
 
 	@Override
-	public Integer retrieveMoney(Integer amountToRetrieve, Integer accountNumber) {
-		Integer currentAmount = getAccountWithNumber(accountNumber).getAmount();
+	public BigDecimal retrieveMoney(BigDecimal amountToRetrieve, Integer accountNumber) {
+		BigDecimal currentAmount = getAccountWithNumber(accountNumber).getAmount();
 		
-		if(amountToRetrieve > currentAmount) throw new OverdraftWithdrawalException("Unpermitted overdraft withdrawal");
-		getAccountWithNumber(accountNumber).setAmount(currentAmount - amountToRetrieve);
+		if(amountToRetrieve.compareTo(currentAmount) == 1) throw new OverdraftWithdrawalException("Unpermitted overdraft withdrawal");
+		getAccountWithNumber(accountNumber).setAmount(currentAmount.subtract(amountToRetrieve));
 		
-		Integer balance = getAccountWithNumber(accountNumber).getAmount();
+		BigDecimal balance = getAccountWithNumber(accountNumber).getAmount();
 		
 		Date date = new Date(System.currentTimeMillis());
-		operationList.add(new Operation(accountNumber, OperationType.WITHDRAWAL,date, amountToRetrieve, balance));
+		operationList.add(new Operation(accountNumber, OperationType.WITHDRAWAL, date, amountToRetrieve, balance));
 		
 		return balance;
 	}
@@ -69,19 +70,32 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	private Account getAccountWithNumber(Integer accountNumber) {
 		return accountList
 				.stream()
-				.filter(a -> a.getAccountNumber() == accountNumber)
+				.filter(a -> a.getAccountNumber().equals(accountNumber))
 				.findAny()
 				.get();
 	}
 
 	@Override
-	public List<Operation> seeAccountHistory(Integer accountNumber) {
+	public String seeAccountHistory(Integer accountNumber) {
+		String history;
 		
-		List<Operation> history = new ArrayList<Operation>();
+		List<Operation> operations = new ArrayList<Operation>();
 		for(Operation operation : operationList) {
-			if (operation.getAccountNumber() == accountNumber)
-				history.add(operation);
+			if (operation.getAccountNumber().equals(accountNumber))
+				operations.add(operation);
 		}
+		if (operations.isEmpty() == false) {
+			 history = "Account History: Account number " 
+                     + accountNumber + "\nBalance: " 
+			         + getAccountWithNumber(accountNumber).getAmount() + "\n\n"
+			         + "History:\n";
+				for(Operation operation : operations) {
+					history = history + operation.getDate() + " " 
+				                      + operation.getType().name() + " "
+				                      + operation.getAmount() + "\n";
+				}
+		} else history = "No History Available";
+
 		return history;
 	}
 }

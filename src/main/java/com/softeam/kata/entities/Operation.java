@@ -1,5 +1,6 @@
 package com.softeam.kata.entities;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Operation {
@@ -7,12 +8,12 @@ public class Operation {
 	private Integer accountNumber;
 	private OperationType type;
 	private Date date;
-	private Integer amount;
-	private Integer balance;
+	private BigDecimal amount;
+	private BigDecimal balance;
 
 	
 
-	public Operation(Integer accountNumber, OperationType type, Date date, Integer amount, Integer balance) {
+	public Operation(Integer accountNumber, OperationType type, Date date, BigDecimal amount, BigDecimal balance) {
 		this.accountNumber = accountNumber;
 		this.type = type;
 		this.date = date;
@@ -36,19 +37,19 @@ public class Operation {
 		this.date = date;
 	}
 
-	public Integer getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Integer amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
-	public Integer getBalance() {
+	public BigDecimal getBalance() {
 		return balance;
 	}
 
-	public void setBalance(Integer balance) {
+	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
 
